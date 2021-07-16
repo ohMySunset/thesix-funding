@@ -101,9 +101,9 @@ public class FundingRepoTests {
     @Test
     public void testList1() {
 
-        Optional<Product[]> result = productRepository.getProductById(5L);
+        //Optional<Product[]> result = productRepository.getProductById(5L);
 
-        System.out.println(Arrays.stream(result.get()).collect(Collectors.toList()));
+        //System.out.println(Arrays.stream(result.get()).collect(Collectors.toList()));
     }
 
 
@@ -116,9 +116,9 @@ public class FundingRepoTests {
 
         Pageable pageable = PageRequest.of(0, 10);
 
-        Page<Object[]> result = fundingRepository.getData(pageable);
+        //Page<Object[]> result = fundingRepository.getData(pageable);
 
-        result.getContent().forEach(arr -> System.out.println(Arrays.toString(arr)));
+        //result.getContent().forEach(arr -> System.out.println(Arrays.toString(arr)));
 
     }
 
@@ -147,8 +147,8 @@ public class FundingRepoTests {
     @Test
     public void getList3(){
 
-        Optional<Funding> result1 = fundingRepository.getFundingById(2L);
-        Object result2 = productRepository.getProductById(2L);
+        //Optional<Funding> result1 = fundingRepository.getFundingById(2L);
+        //sObject result2 = productRepository.getProductById(2L);
     }
 
     /**
