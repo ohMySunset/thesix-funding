@@ -98,16 +98,16 @@ public class FundingServiceImpl implements FundingService {
     @Override
     public FundingResponseDTO getData(Long fno) {
 
-        Optional<Funding> funding = fundingRepository.getFundingById(fno);
-        Optional<Product[]> products1 = productRepository.getProductById(fno);
-        Optional<Long> favoriteCount = favoriteRepository.getFavoriteCntById(fno);
+        Funding funding = fundingRepository.getFundingById(fno);
+        Product[] products1 = productRepository.getProductById(fno);
+        Long favoriteCount = favoriteRepository.getFavoriteCntById(fno);
 
-        FundingDTO fundingDTO = entityToDTO(funding.get());
+        FundingDTO fundingDTO = entityToDTO(funding);
 
         FundingResponseDTO responseDTO = FundingResponseDTO.builder()
-                .fundingDTO(fundingDTO).productDTOs(Arrays.stream(products1.get())
+                .fundingDTO(fundingDTO).productDTOs(Arrays.stream(products1)
                         .map(product -> entityToDTO(product)).collect(Collectors.toList()))
-                .favoriteCount(favoriteCount.get())
+                .favoriteCount(favoriteCount)
                 .build();
 
         return responseDTO;
@@ -125,14 +125,14 @@ public class FundingServiceImpl implements FundingService {
         // FundingDTO -> Entity
         Funding fundingEntity = dtoToEntity(registerDTO);
 
-        Optional<Funding> funding = fundingRepository.getFundingById(fno);
+        Funding funding = fundingRepository.getFundingById(fno);
         // 글 내용 수정
-        funding.get().changeContent(fundingEntity.getContent());
-        funding.get().changeTitle(fundingEntity.getTitle());
-        funding.get().changeDueDate(fundingEntity.getDueDate());
-        funding.get().changeTotalAmount(fundingEntity.getTotalAmount());
+        funding.changeContent(fundingEntity.getContent());
+        funding.changeTitle(fundingEntity.getTitle());
+        funding.changeDueDate(fundingEntity.getDueDate());
+        funding.changeTotalAmount(fundingEntity.getTotalAmount());
 
-        fundingRepository.save(funding.get());
+        fundingRepository.save(funding);
 
         for (ProductDTO dto : registerDTO.getProductDTOs()) {
             // ProductDTO -> Entity
@@ -141,11 +141,11 @@ public class FundingServiceImpl implements FundingService {
                     .name(dto.getName())
                     .des(dto.getDes())
                     .price(dto.getPrice())
-                    .funding(funding.get()).build();
+                    .funding(funding).build();
 
-            Optional<Product[]> products = productRepository.getProductById(fno);
+            Product[] products = productRepository.getProductById(fno);
 
-            for (Product p : products.get()) {
+            for (Product p : products) {
                 p.changeName(productEntity.getName());
                 p.changeDes(productEntity.getDes());
                 p.changePrice(productEntity.getPrice());
@@ -155,12 +155,13 @@ public class FundingServiceImpl implements FundingService {
             }
         }
         // 리턴값 출력을 위해 Entity -> DTO 변환
-        FundingDTO dto = entityToDTO(funding.get());
-        Optional<Product[]> products = productRepository.getProductById(fno);
+        FundingDTO dto = entityToDTO(funding);
+        Product[] products = productRepository.getProductById(fno);
 
-        return FundingResponseDTO.builder().fundingDTO(dto)
-                .productDTOs(Arrays.stream(products.get())
-                        .map(product -> entityToDTO(product)).collect(Collectors.toList())).build();
+//        return FundingResponseDTO.builder().fundingDTO(dto)
+//                .productDTOs(Arrays.stream(products)
+//                        .map(product -> entityToDTO(product).collect(Collectors.toList())).build();
+     return null;
     }
 
     /**
@@ -178,9 +179,9 @@ public class FundingServiceImpl implements FundingService {
             fundingRepository.save(fundingResult.get());
         }
 
-        Optional<Product[]> products = productRepository.getProductById(fno);
+        Product[] products = productRepository.getProductById(fno);
 
-        for (Product p : products.get()) {
+        for (Product p : products) {
             if (p.isRemoved() == false) {
                 p.changeRemoved(true);
                 productRepository.save(p);
@@ -188,12 +189,12 @@ public class FundingServiceImpl implements FundingService {
         }
 
         Optional<Funding> funding = fundingRepository.findById(fno);
-        Optional<Product[]> productList = productRepository.getProductById(fno);
+        Product[] productList = productRepository.getProductById(fno);
         FundingDTO dto = entityToDTO(funding.get());
 
         return FundingResponseDTO.builder()
                 .fundingDTO(dto)
-                .productDTOs(Arrays.stream(productList.get())
+                .productDTOs(Arrays.stream(productList)
                         .map(product1 -> entityToDTO(product1)).collect(Collectors.toList())).build();
     }
 
@@ -216,7 +217,7 @@ public class FundingServiceImpl implements FundingService {
 
         favoriteRepository.save(favorite);
 
-        return favoriteRepository.getFavoriteCntById(favoriteDTO.getFunFno()).get();
+        return favoriteRepository.getFavoriteCntById(favoriteDTO.getFunFno());
     }
 
     @Override

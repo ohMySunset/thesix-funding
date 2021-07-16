@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("select p from Product p where p.funding.fno = :fno and p.removed=false")
-    Optional<Product[]> getProductById(Long fno);
+    Product[] getProductById(Long fno);
 
 
 }

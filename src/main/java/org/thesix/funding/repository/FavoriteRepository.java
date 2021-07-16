@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 
     @Query("select count(f) from Favorite f where f.funding.fno = :fno")
-    Optional<Long> getFavoriteCntById(Long fno);
+    Long getFavoriteCntById(Long fno);
 
 }

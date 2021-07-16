@@ -15,15 +15,15 @@ public interface FundingRepository extends JpaRepository<Funding, Long>, Funding
             "from Funding f left join Product p on f.fno=p.funding.fno " +
             "left join Favorite fa on f.fno=fa.funding.fno " +
             "group by f order by f.fno desc ")
-    Page<Object[]> getData(Pageable pageable);
+    Object[] getData(Pageable pageable);
 
 
     @Query("select f from Funding f where f.fno=:fno and f.removed=false")
-    Optional<Funding> getFundingById(Long fno);
+    Funding getFundingById(Long fno);
 
 
-    @Query("select f from Funding f inner join Favorite fa on fa.actor=:email")
-    Optional<Funding[]> getFundingByemail(String email);
+    @Query("select f from Funding f inner join Favorite fa on f.fno=fa.funding.fno where fa.actor=:email")
+    Funding[] getFundingByemail(String email);
 
 
 
